@@ -254,7 +254,7 @@ const RentModal = () => {
           subtitle="How much do you charge per night?"
         />
         <Input
-          id="Price"
+          id="price"
           label="Price"
           formatPrice
           type="number"
@@ -275,7 +275,7 @@ const RentModal = () => {
       actionLabel={actionLabel}
       secondaryActionLabel={secondaryActionLabel}
       secondaryAction={step === STEPS.CATEGORY ? undefined : onBack}
-      title="Aibrnb your home!"
+      title="Airbnb your home!"
       body={bodyContent}
     />
   );
