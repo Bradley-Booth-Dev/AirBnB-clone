@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import getCurrentUser from "@/app/actions/getCurrentUser";
 
-import prisma from "@/app/libs/primsadb";
+import prisma from "@/app/libs/prismadb";
 import { MdFavorite } from "react-icons/md";
 import { use } from "react";
 
