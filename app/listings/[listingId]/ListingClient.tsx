@@ -9,7 +9,11 @@ import useLoginModal from "@/app/hooks/useLoginModal";
 import { SafeListing, SafeUser, safeReservation } from "@/app/types";
 import { Reservation } from "@prisma/client";
 import axios from "axios";
-import { differenceInCalendarDays, differenceInDays, eachDayOfInterval } from "date-fns";
+import {
+  differenceInCalendarDays,
+  differenceInDays,
+  eachDayOfInterval,
+} from "date-fns";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { toast } from "react-hot-toast";
@@ -18,8 +22,8 @@ import { Range } from "react-date-range";
 const initialDateRange = {
   startDate: new Date(),
   endDate: new Date(),
-  key: 'selection'
-}
+  key: "selection",
+};
 
 interface ListingClientProps {
   reservations?: safeReservation[];
@@ -34,24 +38,24 @@ const ListingClient: React.FC<ListingClientProps> = ({
   reservations = [],
   currentUser,
 }) => {
-  const loginModal = useLoginModal()
-  const router = useRouter()
+  const loginModal = useLoginModal();
+  const router = useRouter();
 
   const disabledDates = useMemo(() => {
-    let dates: Date[] = []
-    
+    let dates: Date[] = [];
+
     reservations.forEach((reservation) => {
       const range = eachDayOfInterval({
         start: new Date(reservation.startDate),
-        end: new Date(reservation.endDate)
-      })
+        end: new Date(reservation.endDate),
+      });
 
-      dates = [...dates, ...range]
-    })
+      dates = [...dates, ...range];
+    });
 
     return dates;
-  }, [reservations])
-  
+  }, [reservations]);
+
   const [isLoading, setIsLoading] = useState(false);
   const [totalPrice, setTotalPrice] = useState(listing.price);
   const [dateRange, setDateRange] = useState<Range>(initialDateRange);
@@ -61,32 +65,27 @@ const ListingClient: React.FC<ListingClientProps> = ({
       return loginModal.onOpen();
     }
 
-    setIsLoading(true)
+    setIsLoading(true);
 
-    axios.post('/api/reservations', {
-      totalPrice,
-      startDate: dateRange.startDate,
-      endDate: dateRange.endDate,
-      listingId: listing?.id
-    })
-      .then(() => {
-        toast.success('Listing reserved!')
-        setDateRange(initialDateRange)
-        //redirect to /trips
-        router.refresh()
-      }).catch(() => {
-        toast.error('Something went wrong.')
-      }).finally(() => {
-        setIsLoading(false)
+    axios
+      .post("/api/reservations", {
+        totalPrice,
+        startDate: dateRange.startDate,
+        endDate: dateRange.endDate,
+        listingId: listing?.id,
       })
-  }, [
-    totalPrice,
-    dateRange,
-    listing?.id,
-    router,
-    currentUser,
-    loginModal
-  ])
+      .then(() => {
+        toast.success("Listing reserved!");
+        setDateRange(initialDateRange);
+        router.push("/trips");
+      })
+      .catch(() => {
+        toast.error("Something went wrong.");
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }, [totalPrice, dateRange, listing?.id, router, currentUser, loginModal]);
 
   useEffect(() => {
     if (dateRange.startDate && dateRange.endDate) {
@@ -96,17 +95,16 @@ const ListingClient: React.FC<ListingClientProps> = ({
       );
 
       if (dayCount && listing.price) {
-        setTotalPrice(dayCount * listing.price)
+        setTotalPrice(dayCount * listing.price);
       } else {
         setTotalPrice(listing.price);
       }
     }
-  },[dateRange, listing.price])
+  }, [dateRange, listing.price]);
 
   const category = useMemo(() => {
-    return categories.find((item) => 
-     item.label === listing.category);
- }, [listing.category]);
+    return categories.find((item) => item.label === listing.category);
+  }, [listing.category]);
   return (
     <Container>
       <div className="max-w-screen-lg mx-auto">
@@ -128,7 +126,8 @@ const ListingClient: React.FC<ListingClientProps> = ({
               bathroomCount={listing.bathroomCount}
               locationValue={listing.locationValue}
             />
-            <div className="
+            <div
+              className="
             order-first
             mb-10
             md:order-last
