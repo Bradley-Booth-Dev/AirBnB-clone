@@ -1,0 +1,12 @@
+{
+  "builds": [
+    {
+      "src": "/",
+      "use": "@vercel/node",
+      "config": {
+        "maxLambdaSize": "50mb"
+      },
+      "buildCommand": "npm run prisma && npm run build"
+    }
+  ]
+}
