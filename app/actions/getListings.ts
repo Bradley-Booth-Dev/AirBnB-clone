@@ -1,4 +1,4 @@
-import primsa from "@/app/libs/prismadb";
+import prisma from "@/app/libs/prismadb";
 
 export interface IListingsParams {
   userId?: string;
@@ -75,7 +75,7 @@ export async function getListings(params: IListingsParams) {
       };
     }
 
-    const listings = await primsa.listing.findMany({
+    const listings = await prisma.listing.findMany({
       where: query,
       orderBy: {
         createdAt: "desc",
