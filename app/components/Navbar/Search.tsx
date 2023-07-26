@@ -48,7 +48,7 @@ const Search = () => {
     }
 
     return "Add Guests";
-  }, [getByValue, locationValue]);
+  }, [guestCount]);
 
   return (
     <div
