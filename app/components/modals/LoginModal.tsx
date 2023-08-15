@@ -62,7 +62,7 @@ const LoginModal = () => {
       <Heading title="Welcome back!" subtitle="Login to your account!" />
       <Input
         id="email"
-        label="Email"
+        label="Email - test: testmail@hotmail.co.uk"
         disabled={isLoading}
         register={register}
         errors={errors}
